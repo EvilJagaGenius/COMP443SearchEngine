@@ -1,10 +1,20 @@
 class WebPage(val id: String, val name: String, val url: String,
               val text: String, val links: List[String]) {
-
+  val id: String
+  val name: String
+  val url: String
+  val text: String
+  val links: List[String] // a list of ids this page links to
 }
 
-// TODO: Define RankedWebPage
+class RankedWebPage extends WebPage {
+  val weight: Double
+}
+
+class SearchedWebPage extends RankedWebPage {
+  val textmatch: Double
+}
 
 
-// TODO: Define SearchedWebPage
+
 

@@ -14,6 +14,40 @@ object AskWillie {
 
         // Load WebPage.id -> WebPage map to better handle graph
         val pages: Map[String, WebPage] = mapWebPages(loadWebPages)
+
+        //Ranking Pages with All the Ranking Algorithms
+        val pagesEqualRank = PageRank.equal(pages)
+        val pagesIndegreeRank = PageRank.indegree(pages)
+        val pagesPageRank = PageRank.pagerank(pages);
+
+        //Min-Max Normalization Of Ranking
+        val minIndegreeRank = (page <- pagesIndegreeRank.values).foldLeft(1)(Math.min(_, _))
+        val maxIndegreeRank = (page <- pagesIndegreeRank.values).foldLeft(0)(Math.max(_, _))
+        val minPageRank = (page <- pagesPageRank.values).foldLeft(1)(Math.min(_,_))
+        val maxPageRank = (page <- pagesPageRank.values).foldLeft(0)(Math.max(_,_))
+        for(page <- pagesIndegreeRank.keys){
+            pagesIndegreeRank(page) = (pagesIndegreeRank(page) - minIndegreeRank)/(maxIndegreeRank-minIndegreeRank)
+        }
+        for(page <- pagesPageRank.keys){
+            pagesPageRank(page) = (pagesPageRank(page) - minPageRank)/(maxPageRank-minPageRank)
+        }
+
+        //While query isn't :quit, do search loop
+            //Accept user query
+
+            //Compute how well each page matches using the methods of the PageSearch object
+
+            //Min-Max Normalization of Match Ratings
+
+            //Compute the overall match as the arithmetic mean of the pages rank and text-match
+            //Compute the overall match as the geometric mean of the pages rank and text-match
+            //Compute the overall match as the harmonic mean of the pages rank and text-match
+
+            //Sort pages based on their overall match using scala.math.Ordering to support multiple options for computing the mean
+
+            //Display the name and url of the top 10 results
+
+
     }
 
     // Load a List of WebPage objects from the packaged prolandwiki.csv file
