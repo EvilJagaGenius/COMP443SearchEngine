@@ -16,8 +16,20 @@ object PageSearch {
     }
 
     def tfidf(pages: List[RankedWebPage], query: List[String]): List[Double] = {
-        // TODO: complete implementation
-        return List(2.0)
+        val tfResults = tf(pages, query)
+        val idfMultiplier = {
+            for (word <- query)
+                yield idf(pages, word)
+        }.foldLeft(1.0) {_ * _}
+        return tfResults.map(_ * idfMultiplier)
+    }
+    
+    def idf(pages: List[RankedWebPage], word: String): Double = {
+        val docsContainingWord = {
+            for (page <- pages)
+                yield (if (page.text.split(" ").contains(word)) 1 else 0)
+        }.foldLeft(0) {_ + _}
+        return math.log(pages.length / (docsContainingWord + 1))
     }
     
     def formatWord(word:String): String = {
