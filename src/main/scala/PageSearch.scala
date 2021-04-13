@@ -12,8 +12,7 @@ object PageSearch {
 
     def tf(pages: List[RankedWebPage], query: List[String]): List[Double] = {
         val countResults = count(pages, query)  // List of doubles
-        for (i <- 1 to countResults.length)
-            yield countResults(i) / pages(i).text.length  // Number of matches / number of characters
+        (for (i <- 1 to countResults.length) yield countResults(i) / pages(i).text.length).toList  // Number of matches / number of characters
     }
 
     def tfidf(pages: List[RankedWebPage], query: List[String]): List[Double] = {

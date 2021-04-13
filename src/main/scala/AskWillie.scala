@@ -21,6 +21,12 @@ object AskWillie {
         val pagesPageRank = PageRank.pagerank(pages);
 
         //Min-Max Normalization Of Ranking
+        val rankIndegreeList = for(page <- pagesIndegreeRank.values) yield page
+        val minIndegreeRank = rankIndegreeList.foldLeft(Double.MaxValue)(Math.min(_, _))
+        val maxIndegreeRank = rankIndegreeList.foldLeft(Double.MinValue)(Math.max(_, _))
+        val rankPagerankList = for(page <- pagesPageRank.values) yield page
+        val minPagerankRank = rankPagerankList.foldLeft(Double.MaxValue)(Math.min(_, _))
+        val maxPagerankRank = rankPagerankList.foldLeft(Double.MinValue)(Math.max(_, _))
 
         //Create rankedWebpageMap
 
