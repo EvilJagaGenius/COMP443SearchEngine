@@ -21,27 +21,12 @@ object AskWillie {
         val pagesPageRank = PageRank.pagerank(pages);
 
         //Min-Max Normalization Of Ranking
-        val minIndegreeRank = (page <- pagesIndegreeRank.values).foldLeft(Double.MaxValue)(Math.min(_, _))
-        val maxIndegreeRank = (page <- pagesIndegreeRank.values).foldLeft(Double.MinValue)(Math.max(_, _))
-        val minPageRank = (page <- pagesPageRank.values).foldLeft(Double.MaxValue)(Math.min(_,_))
-        val maxPageRank = (page <- pagesPageRank.values).foldLeft(Double.MinValue)(Math.max(_,_))
-        for(page <- pagesIndegreeRank.keys){
-            pagesIndegreeRank(page) = (pagesIndegreeRank(page) - minIndegreeRank)/(maxIndegreeRank-minIndegreeRank)
-        }
-        for(page <- pagesPageRank.keys){
-            pagesPageRank(page) = (pagesPageRank(page) - minPageRank)/(maxPageRank-minPageRank)
-        }
 
         //Create rankedWebpageMap
-        val equalRankedPageMap = makeRankedWebPageMap(pagesEqualRank, pages)
-        val indegreeRankedPageMap = makeRankedWebPageMap(pagesIndegreeRank, pages)
-        val pagerankRankedPageMap = makeRankedWebPageMap(pagesPageRank, pages)
 
         //While query isn't :quit, do search loop
-        while(true){
             //Accept user query
-                query = "data"
-                //TODO: find immutable variable way to accept queries
+            //TODO: find immutable variable way to accept queries
 
             //Compute how well each page matches using the methods of the PageSearch object
 
@@ -56,7 +41,6 @@ object AskWillie {
             //Create searchedWebPage List
 
             //Display the name and url of the top 10 results
-        }
     }
 
     // Load a List of WebPage objects from the packaged prolandwiki.csv file

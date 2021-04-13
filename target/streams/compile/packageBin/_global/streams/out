@@ -1,0 +1,23 @@
+[0m[[0m[0mdebug[0m] [0m[0mPackaging C:\Users\hodgepw17\Documents\ScalaProjects\COMP443SearchEngine\target\scala-2.13\comp443searchengine_2.13-1.0.jar ...[0m
+[0m[[0m[0mdebug[0m] [0m[0mInput file mappings:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	AskWillie$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hodgepw17\Documents\ScalaProjects\COMP443SearchEngine\target\scala-2.13\classes\AskWillie$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	AskWillie.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hodgepw17\Documents\ScalaProjects\COMP443SearchEngine\target\scala-2.13\classes\AskWillie.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	PageRank$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hodgepw17\Documents\ScalaProjects\COMP443SearchEngine\target\scala-2.13\classes\PageRank$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	PageRank.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hodgepw17\Documents\ScalaProjects\COMP443SearchEngine\target\scala-2.13\classes\PageRank.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	PageSearch$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hodgepw17\Documents\ScalaProjects\COMP443SearchEngine\target\scala-2.13\classes\PageSearch$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	PageSearch.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hodgepw17\Documents\ScalaProjects\COMP443SearchEngine\target\scala-2.13\classes\PageSearch.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	proglangwiki.csv[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hodgepw17\Documents\ScalaProjects\COMP443SearchEngine\target\scala-2.13\classes\proglangwiki.csv[0m
+[0m[[0m[0mdebug[0m] [0m[0m	RankedWebPage.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hodgepw17\Documents\ScalaProjects\COMP443SearchEngine\target\scala-2.13\classes\RankedWebPage.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	SearchedWebPage.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hodgepw17\Documents\ScalaProjects\COMP443SearchEngine\target\scala-2.13\classes\SearchedWebPage.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	WebPage.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  C:\Users\hodgepw17\Documents\ScalaProjects\COMP443SearchEngine\target\scala-2.13\classes\WebPage.class[0m
+[0m[[0m[0mdebug[0m] [0m[0mDone packaging.[0m
