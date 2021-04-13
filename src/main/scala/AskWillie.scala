@@ -32,6 +32,11 @@ object AskWillie {
             pagesPageRank(page) = (pagesPageRank(page) - minPageRank)/(maxPageRank-minPageRank)
         }
 
+        //Create rankedWebpageMap
+        val equalRankedPageMap = makeRankedWebPageMap(pagesEqualRank, pages)
+        val indegreeRankedPageMap = makeRankedWebPageMap(pagesIndegreeRank, pages)
+        val pagerankRankedPageMap = makeRankedWebPageMap(pagesPageRank, pages)
+
         //While query isn't :quit, do search loop
         while(true){
             //Accept user query
@@ -47,6 +52,8 @@ object AskWillie {
             //Compute the overall match as the harmonic mean of the pages rank and text-match
 
             //Sort pages based on their overall match using scala.math.Ordering to support multiple options for computing the mean
+
+            //Create searchedWebPage List
 
             //Display the name and url of the top 10 results
         }
