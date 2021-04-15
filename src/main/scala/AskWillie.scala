@@ -32,7 +32,7 @@ object AskWillie {
         var query = readLine()
 
         //While query isn't :quit, do search loop
-        while(query != ":quit"){
+        while (query != ":quit") {
             //Make list of words in query for searching match
             var queryWordList = query.split(' ').toList
 
@@ -44,16 +44,18 @@ object AskWillie {
             var pagesMatchMap = ((pages.keys).zip(pagesSearch)).toMap
             var pagesMinmaxMatchMap = minMax(pagesMatchMap)
 
-            //Compute the overall match as the arithmetic, geometric, or harmonic mean of the pages rank and text-match
-            //***CHANGE THIS LINE FOR EXPERIMENTS (MEAN CHOICE)***
-            var pagesSearchMap = makeArithmeticMeanMatch(pagesRankMinMax, pagesMinmaxMatchMap)
+            //Create searchedWebPageMap
+            var pagesSearchMap = createSearchedPageMap(pagesMinmaxMatchMap, rankedPagesMap)
+            var pagesSearchMapSortingArray = (pagesSearchMap.values).toArray
 
+            //Compute the overall match as the arithmetic, geometric, or harmonic mean of the pages rank and text-match
             //Sort results
-            var pagesSearchMapSorted = sortMap(pagesSearchMap)
+            //***CHANGE THIS LINE FOR EXPERIMENTS (MEAN CHOICE)***
+            Sorting.quickSort(pagesSearchMapSortingArray)(ArithmeticOrdering)
 
             //Display the name and url of the top 10 results
-            var sortedList = (pagesSearchMapSorted.keys).toList
-            for(i <- 0 until 10) println(pages(sortedList(i)).name + ": " + pages(sortedList(i)).url)
+            var pagesList = pagesSearchMapSortingArray.toList
+            for (i <- 0 until 10) println(pagesList(i).name + ": " + pagesList(i).url)
 
             println("=============================================================")
 
@@ -70,7 +72,7 @@ object AskWillie {
             getClass.getClassLoader.getResourceAsStream("proglangwiki.csv"))
         // load all pages from the file line by line
         val pages = (for (line <- fh.getLines) yield {
-            val id::name::url::text::links = line.split(",").toList
+            val id :: name :: url :: text :: links = line.split(",").toList
             new WebPage(id, name, url, text, links)
         }).toList
         fh.close
@@ -85,32 +87,26 @@ object AskWillie {
     def minMax(rankpages: Map[String, Double]): Map[String, Double] = {
         val min = (rankpages.values).foldLeft(Double.MaxValue)(Math.min(_, _))
         val max = (rankpages.values).foldLeft(Double.MinValue)(Math.max(_, _))
-        if(min == max) rankpages else (for((page, weight) <- rankpages) yield (page, (weight - min)/(max - min))).toMap
+        if (min == max) rankpages else (for ((page, weight) <- rankpages) yield (page, (weight - min) / (max - min))).toMap
     }
 
-    def createRankedPageMap(rankMap: Map[String, Double], pages: Map[String, WebPage]): Map[String, RankedWebPage] ={
-        (for((page, weight) <- rankMap) yield (page, new RankedWebPage(page, pages(page).name, pages(page).url, pages(page).text, pages(page).links, weight))).toMap
+    def createRankedPageMap(rankMap: Map[String, Double], pages: Map[String, WebPage]): Map[String, RankedWebPage] = {
+        (for ((page, weight) <- rankMap) yield (page, new RankedWebPage(page, pages(page).name, pages(page).url, pages(page).text, pages(page).links, weight))).toMap
     }
 
-    def createSearchedPageMap(rankMap: Map[String, Double], pages: Map[String, WebPage]): Map[String, SearchedWebPage] ={
-        (for((page, textmatch) <- rankMap) yield (page, new SearchedWebPage(page, pages(page).name, pages(page).url, pages(page).text, pages(page).links, textmatch))).toMap
+    def createSearchedPageMap(rankMap: Map[String, Double], pages: Map[String, RankedWebPage]): Map[String, SearchedWebPage] = {
+        (for ((page, textmatch) <- rankMap) yield (page, new SearchedWebPage(page, pages(page).name, pages(page).url, pages(page).text, pages(page).links, pages(page).weight, textmatch))).toMap
     }
+}
 
-    def makeArithmeticMeanMatch(rankedPages: Map[String, Double], textmatchPages: Map[String, Double]): Map[String, Double] = {
-        (for((page, rank) <- rankedPages) yield (page, (rank + textmatchPages(page))/2.0)).toMap
-    }
+object ArithmeticOrdering extends Ordering[SearchedWebPage] {
+    def compare(a:SearchedWebPage, b:SearchedWebPage) = (a.weight + a.textmatch)/2 compare (b.weight + b.textmatch)/2
+}
 
-    def makeGeometricMeanMatch(rankedPages: Map[String, Double], textmatchPages: Map[String, Double]): Map[String, Double] = {
-        (for((page, rank) <- rankedPages) yield (page, math.sqrt(rank * textmatchPages(page)))).toMap
-    }
+object GeometricOrdering extends Ordering[SearchedWebPage] {
+    def compare(a:SearchedWebPage, b:SearchedWebPage) = math.sqrt(a.weight * a.textmatch) compare math.sqrt(a.weight * a.textmatch)
+}
 
-    def makeHarmonicMeanMatch(rankedPages: Map[String, Double], textmatchPages: Map[String, Double]): Map[String, Double] = {
-        (for((page, rank) <- rankedPages) yield (page, (2 * rank * textmatchPages(page))/(rank + textmatchPages(page)))).toMap
-    }
-
-    def sortMap(pages: Map[String, Double]): Map[String, Double] = {
-        val pagesSortingArray = (for((page, weight) <- pages) yield (page, weight)).toArray
-        Sorting.quickSort(pagesSortingArray)(Ordering.by[(String, Double), Double](_._2))
-        pagesSortingArray.toMap
-    }
+object HarmonicOrdering extends Ordering[SearchedWebPage] {
+    def compare(a:SearchedWebPage, b:SearchedWebPage) = (2 * a.weight * a.textmatch)/(a.weight + a.textmatch) compare (2 * b.weight * b.textmatch)/(b.weight + b.textmatch)
 }

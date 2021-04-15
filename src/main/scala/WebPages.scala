@@ -20,7 +20,8 @@ class SearchedWebPage(override val id: String,
                       override val url: String,
                       override val text: String,
                       override val links: List[String],
-                      val textmatch: Double) extends WebPage (id, name, url, text, links){
+                      override val weight: Double,
+                      val textmatch: Double) extends RankedWebPage (id, name, url, text, links, weight){
 
 }
 
