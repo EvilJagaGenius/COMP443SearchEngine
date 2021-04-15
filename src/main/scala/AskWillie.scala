@@ -19,7 +19,7 @@ object AskWillie {
 
         //Ranking Pages with The Ranking Algorithms We Choose
         //***CHANGE THIS LINE FOR EXPERIMENTS (RANKING ALGORITHM CHOICE)***
-        val pagesRank: Map[String, Double] = PageRank.equal(pages)
+        val pagesRank: Map[String, Double] = PageRank.pagerank(pages)
 
         //Min-Max Normalization Of Ranking
         val pagesRankMinMax = minMax(pagesRank)
@@ -29,7 +29,7 @@ object AskWillie {
 
         //Take first query
         println("Please enter a search query (:quit to leave program):")
-        var query = readLine()
+        var query = readLine().toLowerCase
 
         //While query isn't :quit, do search loop
         while (query != ":quit") {
@@ -53,15 +53,16 @@ object AskWillie {
             //***CHANGE THIS LINE FOR EXPERIMENTS (MEAN CHOICE)***
             Sorting.quickSort(pagesSearchMapSortingArray)(ArithmeticOrdering)
 
+
             //Display the name and url of the top 10 results
             var pagesList = pagesSearchMapSortingArray.toList
-            for (i <- 0 until 10) println(pagesList(i).name + ": " + pagesList(i).url)
+            for (i <- 0 until 10) println(pagesList(pagesList.length-(i+1)).name + ": " + pagesList(pagesList.length-(i+1)).url)
 
             println("=============================================================")
 
             //Accept user query
             println("Please enter a search query (:quit to leave program):")
-            query = readLine()
+            query = readLine().toLowerCase
         }
     }
 
@@ -100,7 +101,7 @@ object AskWillie {
 }
 
 object ArithmeticOrdering extends Ordering[SearchedWebPage] {
-    def compare(a:SearchedWebPage, b:SearchedWebPage) = (a.weight + a.textmatch)/2 compare (b.weight + b.textmatch)/2
+    def compare(a:SearchedWebPage, b:SearchedWebPage) = (a.weight + a.textmatch)/2.0 compare (b.weight + b.textmatch)/2.0
 }
 
 object GeometricOrdering extends Ordering[SearchedWebPage] {
@@ -108,5 +109,5 @@ object GeometricOrdering extends Ordering[SearchedWebPage] {
 }
 
 object HarmonicOrdering extends Ordering[SearchedWebPage] {
-    def compare(a:SearchedWebPage, b:SearchedWebPage) = (2 * a.weight * a.textmatch)/(a.weight + a.textmatch) compare (2 * b.weight * b.textmatch)/(b.weight + b.textmatch)
+    def compare(a:SearchedWebPage, b:SearchedWebPage) = (2.0 * a.weight * a.textmatch)/(a.weight + a.textmatch) compare (2.0 * b.weight * b.textmatch)/(b.weight + b.textmatch)
 }
