@@ -1,5 +1,7 @@
 import scala.io.Source
 import scala.io.StdIn.readLine
+import scala.math.Ordering
+import scala.util.Sorting
 
 object AskWillie {
     def main(args: Array[String]) = {
@@ -51,58 +53,67 @@ object AskWillie {
             var pagesTfMatchMap = ((pages.keys).zip(pagesTfSearch)).toMap
             var pagesTfidfMatchMap = ((pages.keys).zip(pagesTfidfSearch)).toMap
 
-            //Create searchedWebPage Map
             var pagesCountMinmaxMatchMap = minMax(pagesCountMatchMap)
             var pagesTfMinmaxMatchMap = minMax(pagesTfMatchMap)
             var pagesTfidfMinmaxMatchMap = minMax(pagesTfidfMatchMap)
 
+
             //Compute the overall match as the arithmetic mean of the pages rank and text-match
-            var pagesCountEqualArithmeticMap = makeArithmeticMeanMatch(rankedEqualPagesMap, pagesCountMinmaxMatchMap)
-            var pagesTfEqualArithmeticMap = makeArithmeticMeanMatch(rankedEqualPagesMap, pagesTfMinmaxMatchMap)
-            var pagesTfidfEqualArithmeticMap = makeArithmeticMeanMatch(rankedEqualPagesMap, pagesTfidfMinmaxMatchMap)
-            var pagesCountEqualArithmeticMap = makeArithmeticMeanMatch(rankedIndegreePagesMap, pagesCountMinmaxMatchMap)
-            var pagesTfEqualArithmeticMap = makeArithmeticMeanMatch(rankedIndegreePagesMap, pagesTfMinmaxMatchMap)
-            var pagesTfidfEqualArithmeticMap = makeArithmeticMeanMatch(rankedIndegreePagesMap, pagesTfidfMinmaxMatchMap)
-            var pagesCountEqualArithmeticMap = makeArithmeticMeanMatch(rankedPagerankPagesMap, pagesCountMinmaxMatchMap)
-            var pagesTfEqualArithmeticMap = makeArithmeticMeanMatch(rankedPagerankPagesMap, pagesTfMinmaxMatchMap)
-            var pagesTfidfEqualArithmeticMap = makeArithmeticMeanMatch(rankedPagerankPagesMap, pagesTfidfMinmaxMatchMap)
+            var pagesCountEqualArithmeticMap = makeArithmeticMeanMatch(pagesEqualRank, pagesCountMinmaxMatchMap)
+            var pagesTfEqualArithmeticMap = makeArithmeticMeanMatch(pagesEqualRank, pagesTfMinmaxMatchMap)
+            var pagesTfidfEqualArithmeticMap = makeArithmeticMeanMatch(pagesEqualRank, pagesTfidfMinmaxMatchMap)
+            var pagesCountIndegreeArithmeticMap = makeArithmeticMeanMatch(pagesIndegreeRank, pagesCountMinmaxMatchMap)
+            var pagesTfIndegreeArithmeticMap = makeArithmeticMeanMatch(pagesIndegreeRank, pagesTfMinmaxMatchMap)
+            var pagesTfidfIndegreeArithmeticMap = makeArithmeticMeanMatch(pagesIndegreeRank, pagesTfidfMinmaxMatchMap)
+            var pagesCountPagerankArithmeticMap = makeArithmeticMeanMatch(pagesPageRank, pagesCountMinmaxMatchMap)
+            var pagesTfPagerankArithmeticMap = makeArithmeticMeanMatch(pagesPageRank, pagesTfMinmaxMatchMap)
+            var pagesTfidfPagerankArithmeticMap = makeArithmeticMeanMatch(pagesPageRank, pagesTfidfMinmaxMatchMap)
 
             //Compute the overall match as the geometric mean of the pages rank and text-match
-            var pagesCountEqualGeometricMap = makeGeometricMeanMatch(rankedEqualPagesMap, pagesCountMinmaxMatchMap)
-            var pagesTfEqualGeometricMap = makeGeometricMeanMatch(rankedEqualPagesMap, pagesTfMinmaxMatchMap)
-            var pagesTfidfEqualGeometricMap = makeGeometricMeanMatch(rankedEqualPagesMap, pagesTfidfMinmaxMatchMap)
-            var pagesCountEqualGeometricMap = makeGeometricMeanMatch(rankedIndegreePagesMap, pagesCountMinmaxMatchMap)
-            var pagesTfEqualGeometricMap = makeGeometricMeanMatch(rankedIndegreePagesMap, pagesTfMinmaxMatchMap)
-            var pagesTfidfEqualGeometricMap = makeGeometricMeanMatch(rankedIndegreePagesMap, pagesTfidfMinmaxMatchMap)
-            var pagesCountEqualGeometricMap = makeGeometricMeanMatch(rankedPagerankPagesMap, pagesCountMinmaxMatchMap)
-            var pagesTfEqualGeometricMap = makeGeometricMeanMatch(rankedPagerankPagesMap, pagesTfMinmaxMatchMap)
-            var pagesTfidfEqualGeometricMap = makeGeometricMeanMatch(rankedPagerankPagesMap, pagesTfidfMinmaxMatchMap)
+            var pagesCountEqualGeometricMap = makeGeometricMeanMatch(pagesEqualRank, pagesCountMinmaxMatchMap)
+            var pagesTfEqualGeometricMap = makeGeometricMeanMatch(pagesEqualRank, pagesTfMinmaxMatchMap)
+            var pagesTfidfEqualGeometricMap = makeGeometricMeanMatch(pagesEqualRank, pagesTfidfMinmaxMatchMap)
+            var pagesCountIndegreeGeometricMap = makeGeometricMeanMatch(pagesIndegreeRank, pagesCountMinmaxMatchMap)
+            var pagesTfIndegreeGeometricMap = makeGeometricMeanMatch(pagesIndegreeRank, pagesTfMinmaxMatchMap)
+            var pagesTfidfIndegreeGeometricMap = makeGeometricMeanMatch(pagesIndegreeRank, pagesTfidfMinmaxMatchMap)
+            var pagesCountPagerankGeometricMap = makeGeometricMeanMatch(pagesPageRank, pagesCountMinmaxMatchMap)
+            var pagesTfPagerankGeometricMap = makeGeometricMeanMatch(pagesPageRank, pagesTfMinmaxMatchMap)
+            var pagesTfidfPagerankGeometricMap = makeGeometricMeanMatch(pagesPageRank, pagesTfidfMinmaxMatchMap)
 
             //Compute the overall match as the harmonic mean of the pages rank and text-match
-            var pagesCountEqualHarmonicMap = makeHarmonicMeanMatch(rankedEqualPagesMap, pagesCountMinmaxMatchMap)
-            var pagesTfEqualHarmonicMap = makeHarmonicMeanMatch(rankedEqualPagesMap, pagesTfMinmaxMatchMap)
-            var pagesTfidfEqualHarmonicMap = makeHarmonicMeanMatch(rankedEqualPagesMap, pagesTfidfMinmaxMatchMap)
-            var pagesCountEqualHarmonicMap = makeHarmonicMeanMatch(rankedIndegreePagesMap, pagesCountMinmaxMatchMap)
-            var pagesTfEqualHarmonicMap = makeHarmonicMeanMatch(rankedIndegreePagesMap, pagesTfMinmaxMatchMap)
-            var pagesTfidfEqualHarmonicMap = makeHarmonicMeanMatch(rankedIndegreePagesMap, pagesTfidfMinmaxMatchMap)
-            var pagesCountEqualHarmonicMap = makeHarmonicMeanMatch(rankedPagerankPagesMap, pagesCountMinmaxMatchMap)
-            var pagesTfEqualHarmonicMap = makeHarmonicMeanMatch(rankedPagerankPagesMap, pagesTfMinmaxMatchMap)
-            var pagesTfidfEqualHarmonicMap = makeHarmonicMeanMatch(rankedPagerankPagesMap, pagesTfidfMinmaxMatchMap)
+            var pagesCountEqualHarmonicMap = makeHarmonicMeanMatch(pagesEqualRank, pagesCountMinmaxMatchMap)
+            var pagesTfEqualHarmonicMap = makeHarmonicMeanMatch(pagesEqualRank, pagesTfMinmaxMatchMap)
+            var pagesTfidfEqualHarmonicMap = makeHarmonicMeanMatch(pagesEqualRank, pagesTfidfMinmaxMatchMap)
+            var pagesCountIndegreeHarmonicMap = makeHarmonicMeanMatch(pagesIndegreeRank, pagesCountMinmaxMatchMap)
+            var pagesTfIndegreeHarmonicMap = makeHarmonicMeanMatch(pagesIndegreeRank, pagesTfMinmaxMatchMap)
+            var pagesTfidfIndegreeHarmonicMap = makeHarmonicMeanMatch(pagesIndegreeRank, pagesTfidfMinmaxMatchMap)
+            var pagesCountPagerankHarmonicMap = makeHarmonicMeanMatch(pagesPageRank, pagesCountMinmaxMatchMap)
+            var pagesTfPagerankHarmonicMap = makeHarmonicMeanMatch(pagesPageRank, pagesTfMinmaxMatchMap)
+            var pagesTfidfPagerankHarmonicMap = makeHarmonicMeanMatch(pagesPageRank, pagesTfidfMinmaxMatchMap)
 
             //Sort pages based on their overall match using scala.math.Ordering to support multiple options for computing the mean
 
+            //Display the name and url of the top 10 results for each category
+            print("Begin listing lists: \n\n")
+            //Equal and Count
+            println("Equal Ranking and Count Search:")
+            var equalCountArithmeticList = (pagesCountEqualArithmeticMap.keys).toList
+            for(i <- 0 until 10) println(pages(equalCountArithmeticList(i)).name + ": " + pages(equalCountArithmeticList(i)).url)
+            //Equal and TF
+            //Equal and TFIDF
+            //Indegree and Count
+            //Indegree and TF
+            //Indegree and TFIDF
+            //Pagerank and Count
+            //PageRank and TF
+            //PageRank and TFIDF
 
-            //Display the name and url of the top 10 results
-
+            println("=============================================================")
 
             //Accept user query
             println("Please enter a search query (:quit to leave program):")
             query = readLine()
         }
-
-
-
-
     }
 
     // Load a List of WebPage objects from the packaged prolangwiki.csv file
@@ -124,10 +135,10 @@ object AskWillie {
         (for (page <- pages) yield (page.id, page)).toMap
     }
 
-    def minMax(pages: Map[String, Double]){
-        val min = pages.values.min
-        val max = pages.values.max
-        (for((page, weight) <- pages) yield (page, (weight - min)/(max - min))).toMap
+    def minMax(rankpages: Map[String, Double]): Map[String, Double] = {
+        val min = (rankpages.values).foldLeft(Double.MaxValue)(Math.min(_, _))
+        val max = (rankpages.values).foldLeft(Double.MinValue)(Math.max(_, _))
+        if(min == max) rankpages else (for((page, weight) <- rankpages) yield (page, (weight - min)/(max - min))).toMap
     }
 
     def createRankedPageMap(rankMap: Map[String, Double], pages: Map[String, WebPage]): Map[String, RankedWebPage] ={
