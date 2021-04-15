@@ -27,8 +27,8 @@ object PageSearch {
     def idf(pages: List[RankedWebPage], word: String): Double = {
         val docsContainingWord = {
             for (page <- pages)
-                yield (if (page.text.split(" ").contains(word)) 1 else 0)
-        }.foldLeft(0) {_ + _}
+                yield (if (page.text.split(" ").map(formatWord(_)).contains(word)) 1.0 else 0.0)
+        }.foldLeft(0.0) {_ + _}
         return math.log(pages.length / (docsContainingWord + 1))
     }
     
