@@ -38,7 +38,7 @@ object AskWillie {
 
             //Compute how well each page matches using the methods of the PageSearch object
             //***CHANGE THIS LINE FOR EXPERIMENTS (SEARCH ALGORITHM CHOICE)***
-            var pagesSearch = PageSearch.count((rankedPagesMap.values).toList, queryWordList)
+            var pagesSearch = PageSearch.tfidf((rankedPagesMap.values).toList, queryWordList)
 
             //Min-Max Normalization of Match Ratings
             var pagesMatchMap = ((pages.keys).zip(pagesSearch)).toMap
@@ -51,7 +51,7 @@ object AskWillie {
             //Compute the overall match as the arithmetic, geometric, or harmonic mean of the pages rank and text-match
             //Sort results
             //***CHANGE THIS LINE FOR EXPERIMENTS (MEAN CHOICE)***
-            Sorting.quickSort(pagesSearchMapSortingArray)(ArithmeticOrdering)
+            Sorting.quickSort(pagesSearchMapSortingArray)(GeometricOrdering)
 
 
             //Display the name and url of the top 10 results
@@ -105,7 +105,7 @@ object ArithmeticOrdering extends Ordering[SearchedWebPage] {
 }
 
 object GeometricOrdering extends Ordering[SearchedWebPage] {
-    def compare(a:SearchedWebPage, b:SearchedWebPage) = math.sqrt(a.weight * a.textmatch) compare math.sqrt(a.weight * a.textmatch)
+    def compare(a:SearchedWebPage, b:SearchedWebPage) = math.sqrt(a.weight * a.textmatch) compare math.sqrt(b.weight * b.textmatch)
 }
 
 object HarmonicOrdering extends Ordering[SearchedWebPage] {
