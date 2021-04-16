@@ -60,7 +60,7 @@ object PageRank {
           case _ => {
 
             // "Step" all of the walkers to a new WebPage
-            val newWalkers = for(walker <- walkers) yield {
+            val newWalkers = walkers.par.map((walker: WebPage) => {
               // Apply 85% damping factor
               if(Random.nextInt(100) > 14 && walker.links.length > 0 ) {
                 // Follow a link
@@ -68,9 +68,9 @@ object PageRank {
                 pages.getOrElse(newID, walker)
               } else {
                 // Pick a random page
-                pages.values.toList(Random.nextInt(pages.values.size))
+                pages.values.toList(Random.nextInt(pages.size))
               }
-            }
+            }).seq
 
             // Create a new result map with the new weights
             val newResult = result ++ (for(page <- newWalkers) yield {
@@ -85,7 +85,9 @@ object PageRank {
 
 
         // Create a shuffled Iterable of all the WebPages
-        val randomStart: Iterable[WebPage] = Random.shuffle(pages.values)
+        //val randomStart: Iterable[WebPage] = Random.shuffle(pages.values)
+        val randomStart = for(i <- 0 until pages.size)
+          yield pages.values.toList(Random.nextInt(pages.size))
 
         // Create a map with all the weights starting at 0
         val startingMap = (for(id <- pages.keys) yield (id -> 0.0)).toMap
